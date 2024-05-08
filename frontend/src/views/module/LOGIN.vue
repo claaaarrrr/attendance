@@ -1,9 +1,6 @@
 <template>
     <v-app class="parent">
         <v-container fluid class="login-card">
-            <center>
-                <img src="../../assets/logo3.png" width="300" />
-            </center>
             <v-row>
                 <v-col cols="12" lg="10">
                     <v-form ref="myForm" @submit.prevent="login">
@@ -120,10 +117,6 @@ export default {
 
 .card-txt {
     font-size: 1rem;
-}
-
-.parent {
-    background: url('../../assets/bg4.jpg') center center / cover;
 }
 </style>
   

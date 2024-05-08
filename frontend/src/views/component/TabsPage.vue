@@ -3,7 +3,7 @@
     <v-app-bar app dark>
       <!-- Add your logo or title here -->
       <v-app-bar-title>
-        Voting Mobile
+        Attendance Monitoring System
       </v-app-bar-title>
 
       <!-- Use v-spacer to push the menu button to the end -->
@@ -35,7 +35,7 @@
 
     <v-footer app dark class="fixed-footer">
       <v-tabs v-model="activeTab" color="primary" class="centered-tabs">
-        <v-tab v-for="(item, index) in tabs" :key="index" :to="item.route" style="color: white;">
+        <v-tab v-for="(item, index) in tabs[USER_DETAILS.user_role]" :key="index" :to="item.route" style="color: white;">
           {{ item.label }}
         </v-tab>
       </v-tabs>
@@ -50,10 +50,20 @@ export default {
     return {
       activeTab: 1,
       tabs: [
-        { label: 'PROFILE', route: '/TABSPAGE/PROFILE' },
-        { label: 'DASHBOARD', route: '/TABSPAGE/DASHBOARD' },
-        { label: 'VOTING', route: '/TABSPAGE/VOTING' },
+      [
+        { label: 'ACCOUNTS', route: '/TABSPAGE/ACCOUNTS' },
+        { label: 'RECORDS', route: '/TABSPAGE/RECORDS' },
+        { label: 'SCHEDULE', route: '/TABSPAGE/SCHEDULE' },
+        { label: 'SCANNER', route: '/TABSPAGE/SCANNER' }
       ],
+      [
+        // Define tabs for role2 here
+        { label: 'ACCOUNTS', route: '/TABSPAGE/ACCOUNTS' },
+        { label: 'RECORDS', route: '/TABSPAGE/RECORDS' },
+        { label: 'QR CODE', route: '/TABSPAGE/QRCODE' }
+      ]
+      ]
+
     };
   },
   methods: {
@@ -71,7 +81,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('GetUserDetails').then(()=>{
-      // console.log(this.USER_DETAILS)
+      console.log(this.USER_DETAILS.user_role)
     })
   }
 };

@@ -89,6 +89,7 @@ class UserController extends Controller
                 'users.first_name',
                 'users.middle_name',
                 'users.last_name',
+                'users.user_role',
                 DB::raw("CONCAT(users.first_name, ' ', users.middle_name, ' ', users.last_name) as name"),
                 'users.profile_pic_path'
             )

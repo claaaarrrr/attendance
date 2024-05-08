@@ -1,6 +1,6 @@
 <template>
     <v-app>
-       <h1>Attendace</h1>
+       <h1>Records</h1>
     </v-app>
 </template>
   
