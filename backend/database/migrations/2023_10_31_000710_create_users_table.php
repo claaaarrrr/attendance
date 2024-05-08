@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('gender');
             $table->string('profile_pic_path')->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();;
             $table->timestamps();
             $table->softDeletes();
         });

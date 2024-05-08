@@ -11,6 +11,47 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function insertUser(Request $request)
+    {
+        $user = new User();
+        $user->first_name = $request->input('first_name');
+        $user->middle_name = $request->input('middle_name');
+        $user->last_name = $request->input('last_name');
+        $user->email = $request->input('email');
+        $user->gender = $request->input('gender');
+        $user->username = $request->input('username');
+        $user->password = Hash::make($request->input('password')); // Hash the password
+        $user->save();
+
+        $hashedUserId = substr(base64_encode(Hash::make($user->id)), 0, 9);
+        $user->hashed_user_id = $hashedUserId;
+        $user->save();
+
+        return response()->json(['message' => 'User inserted successfully'], 201);
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $id = $request->input('id');
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+
+    public function GetUsers(Request $request)
+    {
+        $users = User::all();
+        return $users;
+    }
+
     public function Login(Request $request)
     {
         $credentials = $request->validate([
@@ -150,26 +191,26 @@ class UserController extends Controller
             ->first();
         $startVotingDate = \Carbon\Carbon::parse($result->start_voting_date);
         $endVotingDate = \Carbon\Carbon::parse($result->end_voting_date);
-        $User = User::where('id',Auth::user()->id)->first();
+        $User = User::where('id', Auth::user()->id)->first();
         $LastVoteDate = $User->LastVoteDate;
         if ($LastVoteDate != null && $startVotingDate <= $LastVoteDate && $LastVoteDate <= $endVotingDate) {
             return 'true';
-        } 
-        else{
+        } else {
             return 'false';
         }
     }
 
-    function GetToday() {
+    function GetToday()
+    {
         // Set the timezone to Asia/Manila
         date_default_timezone_set('Asia/Manila');
-    
+
         // Get the current date and time in the specified timezone
         $currentDateInTimeZone = date('Y-m-d H:i:s');
-    
+
         // Get the timestamp from the current date and time
         $currentTimestamp = strtotime($currentDateInTimeZone);
-    
+
         // Return an array with the date and timestamp
         return [
             'currentDateInTimeZone' => $currentDateInTimeZone,
