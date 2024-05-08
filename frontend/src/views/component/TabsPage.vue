@@ -51,14 +51,14 @@ export default {
       activeTab: 1,
       tabs: [
       [
-        { label: 'ACCOUNTS', route: '/TABSPAGE/ACCOUNTS' },
+        { label: 'USERS', route: '/TABSPAGE/USERS' },
         { label: 'RECORDS', route: '/TABSPAGE/RECORDS' },
         { label: 'SCHEDULE', route: '/TABSPAGE/SCHEDULE' },
         { label: 'SCANNER', route: '/TABSPAGE/SCANNER' }
       ],
       [
         // Define tabs for role2 here
-        { label: 'ACCOUNTS', route: '/TABSPAGE/ACCOUNTS' },
+        { label: 'ACCOUNT', route: '/TABSPAGE/ACCOUNTS' },
         { label: 'RECORDS', route: '/TABSPAGE/RECORDS' },
         { label: 'QR CODE', route: '/TABSPAGE/QRCODE' }
       ]
@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('GetUserDetails').then(()=>{
-      console.log(this.USER_DETAILS.user_role)
+      console.log(this.USER_DETAILS)
     })
   }
 };

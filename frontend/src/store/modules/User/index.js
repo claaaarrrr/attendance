@@ -26,26 +26,36 @@ export default {
   },
 
   actions: {
-    GetToday({ commit }) {
+    GetUsers({ commit }) {
       return new Promise((resolve, reject) => {
-        api.get('api/GetToday').then((response) => {
-          commit('TODAY', response.data)
+        api.get('api/GetUsers').then((response) => {
+          commit('USERS', response.data)
           resolve(response.data)
         }).catch((error) => {
           reject(error)
         });
       })
     },
-    IsVoted({ commit }) {
+    DeleteUser({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        api.get('api/IsVoted').then((response) => {
-          commit('IS_VOTED', response.data)
+        api.delete('api/DeleteUser', payload).then((response) => {
           resolve(response.data)
         }).catch((error) => {
           reject(error)
         });
       })
     },
+    
+    InsertUser({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        api.post('api/InsertUser', payload).then((response) => {
+          resolve(response.data)
+        }).catch((error) => {
+          reject(error)
+        });
+      })
+    },
+    
     GetUserDetails({ commit }) {
       return new Promise((resolve, reject) => {
         api.get('api/GetUserDetails').then((response) => {
@@ -68,15 +78,6 @@ export default {
     LOGIN({ commit }, payload) {
       return new Promise((resolve, reject) => {
         api.post('api/Login', payload).then((response) => {
-          resolve(response.data)
-        }).catch((error) => {
-          reject(error)
-        });
-      })
-    },
-    UPDATE_LAST_VOTE_DATE({ commit }, payload) {
-      return new Promise((resolve, reject) => {
-        api.patch('api/UpdateLastVoteDate', payload).then((response) => {
           resolve(response.data)
         }).catch((error) => {
           reject(error)

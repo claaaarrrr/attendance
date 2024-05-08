@@ -9,6 +9,7 @@ import ACCOUNTS from '@/views/module/ACCOUNTS.vue';
 import LOGIN from '@/views/module/LOGIN.vue';
 import QRCODE from '@/views/module/QRCODE.vue';
 import SCANNER from '@/views/module/SCANNER.vue';
+import USERS from '@/views/module/USERS.vue';
 
 Vue.use(VueRouter);
 
@@ -54,6 +55,11 @@ const routes = [
                 path: 'SCANNER',
                 name: 'SCANNER',
                 component: SCANNER,
+            },
+            {
+                path: 'USERS',
+                name: 'USERS',
+                component: USERS,
             },
         ]
     },
