@@ -127,6 +127,7 @@ class UserController extends Controller
                 'users.gender',
                 'users.email',
                 'users.address',
+                'users.hashed_user_id',
                 'users.first_name',
                 'users.middle_name',
                 'users.last_name',
