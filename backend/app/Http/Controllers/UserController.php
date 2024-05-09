@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\AttendanceLog;
 use Illuminate\Http\Request;
 use Laravel\Passport\Client;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function ReadUserQR(Request $request)
+    {
+        // Set the timezone to Asia/Manila
+        date_default_timezone_set('Asia/Manila');
+        $AttendanceLog = new AttendanceLog();
+        $AttendanceLog->hashed_user_id = $request->input('hashed_user_id');
+        $AttendanceLog->save();
+        return response()->json(['message' => 'success'], 201);
+    }
 
     public function insertUser(Request $request)
     {
@@ -24,7 +34,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password')); // Hash the password
         $user->save();
 
-        $hashedUserId = substr(base64_encode(Hash::make($user->id)), 0, 9);
+        $hashedUserId = Hash::make($user->id);
         $user->hashed_user_id = $hashedUserId;
         $user->save();
 
@@ -127,6 +137,7 @@ class UserController extends Controller
                 'users.gender',
                 'users.email',
                 'users.address',
+                'users.hashed_user_id',
                 'users.first_name',
                 'users.middle_name',
                 'users.last_name',
@@ -177,28 +188,7 @@ class UserController extends Controller
         return response()->json(['message' => 'Successfully Registered'], 200);
     }
 
-    public function UpdateLastVoteDate()
-    {
-        $User = User::find(Auth::user()->id);
-        $User->LastVoteDate = now();
-        $User->save();
-    }
 
-    public function IsVoted()
-    {
-        $result = DB::table('elections')
-            ->where('isActive', true)
-            ->first();
-        $startVotingDate = \Carbon\Carbon::parse($result->start_voting_date);
-        $endVotingDate = \Carbon\Carbon::parse($result->end_voting_date);
-        $User = User::where('id', Auth::user()->id)->first();
-        $LastVoteDate = $User->LastVoteDate;
-        if ($LastVoteDate != null && $startVotingDate <= $LastVoteDate && $LastVoteDate <= $endVotingDate) {
-            return 'true';
-        } else {
-            return 'false';
-        }
-    }
 
     function GetToday()
     {
