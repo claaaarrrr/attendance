@@ -1,14 +1,12 @@
 <template>
-  <div
-    :style="{
-      height: '100%',
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'start',
-      alignItems: 'center',
-    }"
-  >
+  <div :style="{
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'start',
+    alignItems: 'center',
+  }">
     <p>
       Change Camera
       <select v-model="selectedDevice" style="border: 1px solid #ccc">
@@ -18,24 +16,18 @@
       </select>
     </p>
 
-   
+
 
     <div>
-      <qrcode-stream
-        :style="{ height: '100%', width: '100%' }"
-        :constraints="{ deviceId: selectedDevice.deviceId }"
-        :track="trackFunctionSelected.value"
-        :formats="selectedBarcodeFormats"
-        @error="onError"
-        @detect="onDetect"
-        v-if="selectedDevice !== null"
-      />
+      <qrcode-stream :style="{ height: '100%', width: '100%' }" :constraints="{ deviceId: selectedDevice.deviceId }"
+        :track="trackFunctionSelected.value" :formats="selectedBarcodeFormats" @error="onError" @detect="onDetect"
+        v-if="selectedDevice !== null" />
       <p v-else class="error">No cameras on this device</p>
     </div>
   </div>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { ref, computed, onMounted } from "vue";
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 import { useStore } from 'vuex';
@@ -46,7 +38,9 @@ import Swal from 'sweetalert2';
 const store = useStore();
 
 function onDetect(detectedCodes) {
-  const payload = { hashed_user_id: detectedCodes[0].rawValue};
+  console.log(detectedCodes)
+  const payload = { hashed_user_id: detectedCodes[0].rawValue };
+  console.log(payload)
   store.dispatch("ReadUserQR", payload).then((response) => {
     if (response.message === "success") {
       Swal.fire({
@@ -189,12 +183,13 @@ function onError(err) {
   }
 }
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .error {
   font-weight: bold;
   color: red;
 }
+
 .barcode-format-checkbox {
   margin-right: 10px;
   white-space: nowrap;

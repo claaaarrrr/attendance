@@ -10,60 +10,22 @@
       <v-card>
         <v-card-text class="pt-6">
           <v-form ref="myForm" @submit.prevent="submit">
-            <v-text-field
-              v-model="form.first_name"
-              :rules="rules.required"
-              outlined
-              dense
-              label="First Name"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.middle_name"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Middle Name"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.last_name"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Last Name"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.username"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Username"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.email"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Email"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.password"
-              type="password"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Password"
-            ></v-text-field>
-            <v-autocomplete filled dense
-              :rules="rules.required"
-              v-model="form.gender"
-              label="Gender"
-              :items="['Male', 'Female', 'Others']"
-            ></v-autocomplete>
+            <v-text-field v-model="form.first_name" :rules="rules.required" outlined dense
+              label="First Name"></v-text-field>
+            <v-text-field v-model="form.middle_name" :rules="rules.required" outlined dense
+              label="Middle Name"></v-text-field>
+            <v-text-field v-model="form.last_name" :rules="rules.required" outlined dense
+              label="Last Name"></v-text-field>
+            <v-text-field v-model="form.username" :rules="rules.required" outlined dense
+              label="Username"></v-text-field>
+            <v-text-field v-model="form.email" :rules="rules.required" outlined dense label="Email"></v-text-field>
+            <v-text-field v-model="form.password" type="password" :rules="rules.required" outlined dense
+              label="Password"></v-text-field>
+            <v-autocomplete filled dense :rules="rules.required" v-model="form.gender" label="Gender"
+              :items="['Male', 'Female', 'Others']"></v-autocomplete>
           </v-form>
           <div :style="{ display: 'flex', flexDirection: 'column' }">
-            <div
-              :style="{ display: 'flex', alignSelf: 'center', gap: '0.5rem' }"
-            >
+            <div :style="{ display: 'flex', alignSelf: 'center', gap: '0.5rem' }">
               <v-btn @click="setDialog(false)">Close</v-btn>
               <v-btn @click="submit">Submit</v-btn>
             </div>
@@ -72,12 +34,7 @@
       </v-card>
     </v-dialog>
 
-    <v-data-table
-      :headers="headers"
-      :items="USERS"
-      :items-per-page="5"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="USERS" :items-per-page="5" class="elevation-1">
       <template v-slot:item="{ item }">
         <tr>
           <td>{{ item.id }}</td>
@@ -86,7 +43,6 @@
           <td>{{ item.last_name }}</td>
           <td>{{ item.username }}</td>
           <td>{{ item.email }}</td>
-          <td>{{ item.user_role }}</td>
           <td>
             <!-- <v-icon @click="viewItem(item)" class="mr-2">mdi-eye</v-icon> -->
             <!-- <v-icon @click="editItem(item)" color="orange">mdi-pencil</v-icon> -->
@@ -97,8 +53,8 @@
     </v-data-table>
   </v-app>
 </template>
-  
-  <script>
+
+<script>
 import { mapGetters } from "vuex";
 import moment from "moment";
 
@@ -114,14 +70,13 @@ export default {
         gender: null,
       },
       headers: [
-        { text: "id.", sortable: false },
-        { text: "first_name", sortable: false },
-        { text: "middle_name", sortable: false },
-        { text: "last_name", sortable: false },
-        { text: "username", sortable: false },
-        { text: "email", sortable: false },
-        { text: "user_role", sortable: false },
-        { text: "ACTIONS", value: "actions", sortable: false },
+        { title: "ID", sortable: false },
+        { title: "First Name", sortable: false },
+        { title: "Middle Name", sortable: false },
+        { title: "Last Name", sortable: false },
+        { title: "Username", sortable: false },
+        { title: "Email", sortable: false },
+        { title: "ACTIONS", value: "actions", sortable: false },
       ],
       rules: {
         required: [
@@ -153,14 +108,14 @@ export default {
     ...mapGetters(["USERS", "", ""]),
   },
   methods: {
-    resetForm(){
-        this.form.first_name = null
-        this.form.middle_name = null
-        this.form.last_name = null
-        this.form.username = null
-        this.form.email = null
-        this.form.gender = null
-        this.$refs.myForm.reset();
+    resetForm() {
+      this.form.first_name = null
+      this.form.middle_name = null
+      this.form.last_name = null
+      this.form.username = null
+      this.form.email = null
+      this.form.gender = null
+      this.$refs.myForm.reset();
     },
     submit() {
       if (this.$refs.myForm.validate()) {
@@ -202,8 +157,7 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 /* Add your styling if needed */
 </style>
-  
