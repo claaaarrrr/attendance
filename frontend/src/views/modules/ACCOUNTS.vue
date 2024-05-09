@@ -49,7 +49,7 @@
               <v-file-input v-model="formData.profile_pic" label="Profile Picture"></v-file-input>
             </v-col>
           </v-row>
-          <v-form @submit.prevent="updateUser">
+          <v-form @submit.prevent="updateUser()">
             <v-row>
               <v-col>
                 <v-text-field v-model="formData.first_name" label="First Name"></v-text-field>
@@ -65,8 +65,11 @@
             <v-text-field v-model="formData.email" label="Email"></v-text-field>
             <v-text-field v-model="formData.address" label="Address"></v-text-field>
 
-            <v-btn type="submit" color="success">Update</v-btn>
-            <v-btn color="warning" @click="editMode = false">Cancel</v-btn>
+            <v-row>
+              <v-btn type="submit" color="success">Update</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="error" @click="editMode = false">Cancel</v-btn>
+            </v-row>
           </v-form>
         </v-card-text>
       </v-card>
@@ -77,11 +80,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import axios from 'axios';
 
 export default {
   computed: {
-    ...mapGetters(['USER_DETAILS']),
+    ...mapGetters(['USER_DETAILS', 'GET_NUMBER']),
   },
   data() {
     return {
@@ -99,17 +101,24 @@ export default {
   },
   methods: {
     updateUser() {
-      axios.post('/UpdateUserDetails', this.formData)
-        .then(response => {
-          this.$store.commit('UPDATE_USER_DETAILS', response.data.user);
-          this.editMode = false;
-          this.$toast.success('User details updated successfully');
-        })
-        .catch(error => {
-          console.error('Error updating user details:', error.response ? error.response.data.message : 'Unknown error');
-          this.$toast.error('Failed to update user details');
+      const forms = {
+        first_name: this.formData.first_name,
+        middle_name: this.formData.middle_name,
+        last_name: this.formData.last_name,
+        gender: this.formData.gender,
+        email: this.formData.email,
+        address: this.formData.address,
+      };
+      console.log(forms);
+      this.$store.dispatch('UpdateUserDetails', forms).then(() => {
+        this.$swal.fire({
+          title: "Update Success",
+          text: "Account changes has been made!",
+          icon: "success",
         });
-    }
-  }
+        this.editMode = false;
+      });
+    },
+  },
 };
 </script>

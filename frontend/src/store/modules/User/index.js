@@ -125,5 +125,19 @@ export default {
           });
       });
     },
+
+    UpdateUserDetails({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        api
+          .post("api/UpdateUserDetails", payload)
+          .then((response) => {
+            resolve(response);
+            commit("USER_DETAILS", response.data.user);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
   },
 };
