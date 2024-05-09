@@ -1,6 +1,6 @@
 <template>
     <v-app>
-       <h1>Records</h1>
+       <h1>QR CODE</h1>
     </v-app>
 </template>
   
