@@ -55,6 +55,15 @@ export default {
         });
       })
     },
+    ReadUserQR({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        api.post('api/ReadUserQR', payload).then((response) => {
+          resolve(response.data)
+        }).catch((error) => {
+          reject(error)
+        });
+      })
+    },
     
     GetUserDetails({ commit }) {
       return new Promise((resolve, reject) => {

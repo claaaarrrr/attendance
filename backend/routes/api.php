@@ -1,6 +1,6 @@
-<?php
 
 use Illuminate\Http\Request;
+<?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CandidateController;
@@ -21,4 +21,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/InsertUser', [UserController::class, 'InsertUser']);
     Route::put('/UpdateUserDetails', [UserController::class, 'UpdateUserDetails']);
     Route::post('/Logout', [UserController::class, 'Logout']);
+    Route::post('/ReadUserQR', [UserController::class, 'ReadUserQR']);
+
 });
