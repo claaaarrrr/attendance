@@ -9,23 +9,23 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
-    "axios": "^0.21.4",
+    "axios": "^1.6.8",
     "leaflet": "^1.9.3",
     "moment": "^2.30.1",
     "pusher-js": "^8.4.0-rc2",
+    "qrcode.vue": "^3.4.1",
     "roboto-fontface": "*",
-    "sweetalert2": "^11.7.27",
+    "sweetalert2": "^11.6.13",
     "vue": "^3.3.0",
     "vue-leaflet": "^0.1.0",
     "vue-marquee-text-component": "^2.0.1",
+    "vue-qrcode-reader": "^5.5.4",
     "vue-router": "^4.2.5",
     "vue-sweetalert2": "^5.0.5",
     "vue3-icon-picker": "^0.1.1",
     "vue3-leaflet": "^1.0.48",
     "vuetify": "^3.0.0",
-    "vuex": "^4.0.2",
-    "vue-qrcode-reader": "^5.5.4",
-    "qrcode.vue": "^3.4.1"
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/types": "^7.23.0",

@@ -65,7 +65,7 @@ class UserController extends Controller
     public function Login(Request $request)
     {
         $credentials = $request->validate([
-            'username'    => 'required',
+            'username' => 'required',
             'password' => 'required'
         ]);
         $login = DB::table('users')
@@ -88,13 +88,13 @@ class UserController extends Controller
             if (Hash::check($request->password, $login->password)) {
                 $passwordGrantClient = Client::where('password_client', 1)->first();
                 $response = [
-                    'grant_type'    => 'password',
-                    'client_id'     => $passwordGrantClient->id,
+                    'grant_type' => 'password',
+                    'client_id' => $passwordGrantClient->id,
                     'client_secret' => $passwordGrantClient->secret,
-                    'username'      => $request->username,
-                    'user_role'      => $userrole,
-                    'password'      => $request->password,
-                    'scope'         => '*',
+                    'username' => $request->username,
+                    'user_role' => $userrole,
+                    'password' => $request->password,
+                    'scope' => '*',
                 ];
                 if (Auth::attempt($credentials)) {
                     $tokenRequest = Request::create('/oauth/token', 'post', $response);
@@ -157,6 +157,47 @@ class UserController extends Controller
             $userDetail->base64img = 'data:image/' . $image_format . ';base64,' . $base64str;
         }
         return $userDetail;
+    }
+
+    public function UpdateUserDetails(Request $request)
+    {
+        $userId = Auth::user()->id;
+
+        try {
+            $user = User::findOrFail($userId);
+
+            $currentUserDetails = $this->GetUserDetails();
+
+            $validatedData = $request->validate([
+                'gender' => 'nullable|string',
+                'email' => 'nullable|email',
+                'address' => 'nullable|string',
+                'first_name' => 'nullable|string',
+                'middle_name' => 'nullable|string',
+                'last_name' => 'nullable|string',
+                'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            foreach ($validatedData as $key => $value) {
+                if ($value !== null && $currentUserDetails->{$key} !== $value) {
+                    $user->{$key} = $value;
+                }
+            }
+
+            if ($request->hasFile('profile_pic')) {
+                $profilePic = $request->file('profile_pic');
+                $profilePicPath = $profilePic->store('profile_pics', 'public');
+                $user->profile_pic_path = $profilePicPath;
+            }
+
+            $user->save();
+
+            $updatedUserDetails = $this->GetUserDetails();
+
+            return response()->json(['message' => 'User details updated successfully', 'user' => $updatedUserDetails], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update user details', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function Logout(Request $request)
