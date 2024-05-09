@@ -9,9 +9,9 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ElectionController;
 
-
 Route::post('/Login', [UserController::class, 'Login']);
 Route::post('/Register', [UserController::class, 'Register']);
+
 Route::middleware('auth:api')->group(function () {
     //USER API
     Route::get('/authenticate', [UserController::class, 'authenticate']);
@@ -19,6 +19,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/GetUsers', [UserController::class, 'GetUsers']);
     Route::delete('/DeleteUser', [UserController::class, 'DeleteUser']);
     Route::post('/InsertUser', [UserController::class, 'InsertUser']);
+    Route::put('/UpdateUserDetails', [UserController::class, 'UpdateUserDetails']);
     Route::post('/Logout', [UserController::class, 'Logout']);
-
 });

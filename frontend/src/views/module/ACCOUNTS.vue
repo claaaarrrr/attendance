@@ -1,63 +1,71 @@
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6">
-        <v-card class="user-info-container" elevation="10">
-          <v-card-title>User Information</v-card-title>
-          <v-card-text>
-            <v-row align="center">
-              <v-col>
-                <img :src="USER_DETAILS.base64img" alt="Profile Picture" width="150" class="mr-2 profile-picture" />
-              </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-              <v-col>
-                <strong>Name:</strong> {{ USER_DETAILS.name }}
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col>
-                <strong>Gender:</strong> {{ USER_DETAILS.gender }}
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col>
-                <strong>Email:</strong> {{ USER_DETAILS.email }}
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col>
-                <strong>Address:</strong> {{ USER_DETAILS.address }}
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="editProfile">Edit Profile</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-dialog v-model="editProfileDialogVisible" max-width="600">
+    <v-card class="user-info-container" elevation="10">
+      <v-card-title>User Information</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col>
+            <img :src="USER_DETAILS.base64img" alt="Profile Picture" width="150" class="mr-2 profile-picture" />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <strong>Name:</strong> {{ USER_DETAILS.name }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <strong>Gender:</strong> {{ USER_DETAILS.gender }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <strong>Email:</strong> {{ USER_DETAILS.email }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <strong>Address:</strong> {{ USER_DETAILS.address }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary" @click="editMode = true; formData = { ...USER_DETAILS }">Edit</v-btn>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+
+    <v-dialog v-model="editMode" max-width="500px">
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
         <v-card-text>
-          <v-form ref="profileForm">
-            <img v-if="editedUserDetails.base64img" :src="editedUserDetails.base64img" alt="Current Profile Picture" width="150" class="mr-2 profile-picture" />
-            <v-file-input
-              label="Upload New Profile Picture"
-              accept="image/jpeg,image/png,image/jpg"
-              @change="handleFileUpload"
-            ></v-file-input>
-            <v-text-field label="Name" v-model="editedUserDetails.name"></v-text-field>
-            <v-text-field label="Gender" v-model="editedUserDetails.gender"></v-text-field>
-            <v-text-field label="Email" v-model="editedUserDetails.email"></v-text-field>
-            <v-text-field label="Address" v-model="editedUserDetails.address"></v-text-field>
+          <v-row>
+            <v-col>
+              <img :src="USER_DETAILS.base64img" alt="Profile Picture" width="150" class="mr-2 profile-picture" />
+              <v-file-input v-model="formData.profile_pic" label="Profile Picture"></v-file-input>
+            </v-col>
+          </v-row>
+          <v-form @submit.prevent="updateUser">
+            <v-row>
+              <v-col>
+                <v-text-field v-model="formData.first_name" label="First Name"></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field v-model="formData.middle_name" label="Middle Name"></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field v-model="formData.last_name" label="Last Name"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-text-field v-model="formData.gender" label="Gender"></v-text-field>
+            <v-text-field v-model="formData.email" label="Email"></v-text-field>
+            <v-text-field v-model="formData.address" label="Address"></v-text-field>
+
+            <v-btn type="submit" color="success">Update</v-btn>
+            <v-btn color="warning" @click="editMode = false">Cancel</v-btn>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-btn color="blue darken-1" @click="saveProfile">Save</v-btn>
-          <v-btn color="red darken-1" @click="cancelEdit">Cancel</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
@@ -65,6 +73,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
   computed: {
@@ -72,37 +81,37 @@ export default {
   },
   data() {
     return {
-      editProfileDialogVisible: false,
-      editedUserDetails: {
-        base64img: '',
-        name: '',
+      editMode: false,
+      formData: {
+        first_name: '',
+        middle_name: '',
+        last_name: '',
         gender: '',
         email: '',
         address: '',
+        profile_pic: null
       },
+      error: null // Add error property to store error messages
     }
   },
   methods: {
-    editProfile() {
-      this.editedUserDetails = { ...this.USER_DETAILS };
-      this.editProfileDialogVisible = true;
-    },
-    handleFileUpload(files) {
-      const file = files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.editedUserDetails.base64img = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    saveProfile() {
-      console.log('Edited User Details:', this.editedUserDetails);
-      this.editProfileDialogVisible = false;
-    },
-    cancelEdit() {
-      this.editProfileDialogVisible = false;
+    updateUser() {
+      axios.put('/UpdateUserDetails', this.formData) // Use axios.put instead of axios.post
+        .then(response => {
+          const updatedUser = response.data.user;
+          if (updatedUser) {
+            this.$store.commit('UPDATE_USER_DETAILS', updatedUser);
+            this.editMode = false;
+            this.$toast.success('User details updated successfully');
+          } else {
+            console.error('Error updating user details: User details not found in response');
+            this.error = 'Failed to update user details';
+          }
+        })
+        .catch(error => {
+          console.error('Error updating user details:', error);
+          this.error = 'Failed to update user details';
+        });
     }
   }
 };
