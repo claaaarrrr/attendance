@@ -4,7 +4,7 @@
             <v-row>
                 <h1>Records</h1>
                 <v-spacer></v-spacer>
-                <v-btn color="red" elevation="1">
+                <v-btn color="red" elevation="1" @click="generatePDF">
                     <v-icon icon="mdi-file-pdf-box"></v-icon>
                     Generate PDF</v-btn>
             </v-row>
@@ -27,12 +27,15 @@
 <script>
 import { mapGetters } from "vuex";
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default {
     data() {
         return {
             headers: [
                 { title: "Name", sortable: false, key: "name" },
+                { title: "Date", sortable: false, key: "date_in" },
                 { title: "Time In", sortable: false, key: "time_in" },
                 { title: "Status", sortable: false, value: 'status' },
             ],
@@ -58,8 +61,57 @@ export default {
 
         fetchSchedule() {
             this.$store.dispatch('getSchedule');
+        },
+
+        generatePDF() {
+            const doc = new jsPDF();
+
+            doc.setFontSize(12);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Attendance Records", 15, 15);
+
+            let y = 25;
+
+            const headers = ["No.", "Name", "Date", "Time In", "Status"];
+
+            const tableData = this.GET_ATTLOGS.data.map((item, index) => {
+                const formattedDate = new Date(item.date_in).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                return [
+                    (index + 1).toString(), // No. column
+                    item.name,              // Name column
+                    formattedDate,          // Date column
+                    item.time_in.toString(),// Time In column
+                    item.time_in > this.GET_IN ? 'Late' : 'On-Time' // Status column
+                ];
+            });
+
+            doc.autoTable({
+                head: [headers],
+                body: tableData,
+                startY: y + 5,
+                margin: { top: 20 },
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 2,
+                    valign: 'middle',
+                    overflow: 'linebreak'
+                },
+                columnStyles: {
+                    0: { cellWidth: 10 },
+                }
+            });
+
+            doc.save("attendance_records.pdf");
         }
+
     },
+
 
     watch: {
     },
