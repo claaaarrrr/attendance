@@ -143,6 +143,8 @@ class UserController extends Controller
                 'users.last_name',
                 'users.user_role',
                 'users.suffix',
+                'users.username',
+                'users.password',
                 DB::raw("CONCAT(users.first_name, ' ', users.middle_name, ' ', users.last_name) as name"),
                 'users.profile_pic_path'
             )
@@ -178,11 +180,18 @@ class UserController extends Controller
                 'last_name' => 'nullable|string',
                 'suffix' => 'nullable|string',
                 'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'username' => 'nullable|string',
+                'password' => 'nullable|string',
             ]);
 
             foreach ($validatedData as $key => $value) {
                 if ($value !== null && $currentUserDetails->{$key} !== $value) {
-                    $user->{$key} = $value;
+                    if ($key === 'password') {
+                        // Hash the password before saving it
+                        $user->{$key} = Hash::make($value);
+                    } else {
+                        $user->{$key} = $value;
+                    }
                 }
             }
 
@@ -196,11 +205,14 @@ class UserController extends Controller
 
             $updatedUserDetails = $this->GetUserDetails();
 
-            return response()->json(['message' => 'User details updated successfully', 'user' => $updatedUserDetails], 200);
+            return response()->json([
+                'message' => 'User details updated successfully', 'user' => $updatedUserDetails,], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update user details', 'error' => $e->getMessage()], 500);
         }
     }
+
+
 
     public function Logout(Request $request)
     {
