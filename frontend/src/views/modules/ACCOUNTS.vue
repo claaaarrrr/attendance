@@ -35,17 +35,6 @@
         </v-row>
         <v-row class="d-flex justify-center">
           <v-col>
-            <strong>Username:</strong> {{ USER_DETAILS.username }}
-          </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center">
-          <v-col>
-            <strong>Password:</strong> {{ maskedPassword }}
-          </v-col>
-        </v-row>
-
-        <v-row class="d-flex justify-center">
-          <v-col>
             <v-btn color="primary" @click="editMode = true; formData = { ...USER_DETAILS }">Edit Profile</v-btn>
           </v-col>
         </v-row>
@@ -85,8 +74,12 @@
               <v-col cols="12">
                 <v-text-field v-model="formData.address" label="Address"></v-text-field>
               </v-col>
-              <v-text-field v-model="formData.username" label="Username"></v-text-field>
-              <v-text-field v-model="formData.password" label="Password" type="password"></v-text-field>
+              <!-- <v-col cols="12">
+                <v-text-field v-model="formData.username" label="Username"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="formData.password" label="Password" type="password"></v-text-field>
+              </v-col> -->
               <v-card-actions>
                 <v-col cols="6">
                   <v-btn type="submit" color="success">Update</v-btn>
@@ -144,7 +137,6 @@ export default {
         username: this.formData.username,
         password: this.formData.password,
       };
-      console.log(forms);
       this.$store.dispatch('UpdateUserDetails', forms).then(() => {
         this.$swal.fire({
           title: "Update Success",

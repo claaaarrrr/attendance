@@ -144,6 +144,7 @@ class UserController extends Controller
                 'users.last_name',
                 'users.user_role',
                 'users.suffix',
+                'users.username',
                 DB::raw("CONCAT_WS(' ', users.first_name, users.middle_name, users.last_name, users.suffix) AS name"),
                 'users.profile_pic_path'
             )
@@ -179,8 +180,8 @@ class UserController extends Controller
                 'last_name' => 'nullable|string',
                 'suffix' => 'nullable|string',
                 'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-                'username' => 'nullable|string',
-                'password' => 'nullable|string',
+                // 'username' => 'nullable|string',
+                // 'password' => 'string',
             ]);
 
             foreach ($validatedData as $key => $value) {
