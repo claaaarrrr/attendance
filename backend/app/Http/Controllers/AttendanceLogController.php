@@ -23,7 +23,7 @@ class AttendanceLogController extends Controller
                 DB::raw("CONCAT_WS(' ', users.first_name, users.middle_name, users.last_name, users.suffix) AS name"),
                 'users.gender',
                 'users.email',
-                'attendance_logs.created_at as time_in',
+                DB::raw("TIME(attendance_logs.created_at) as time_in"),
             )
                 ->leftJoin('attendance_logs', 'users.hashed_user_id', '=', 'attendance_logs.hashed_user_id')
                 ->whereNotNull('attendance_logs.created_at')

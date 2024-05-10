@@ -2,6 +2,7 @@ use Illuminate\Http\Request;
 <?php
 
 use App\Http\Controllers\AttendanceLogController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -20,4 +21,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Attendance Logs
     Route::get('/getAttendance', [AttendanceLogController::class, 'getAttendance']);
+
+    // Schedule
+    Route::get('/getSchedule', [ScheduleController::class, 'getSchedule']);
 });
