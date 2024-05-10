@@ -17,7 +17,6 @@ class AttendanceLogController extends Controller
         $user_role = $user->user_role;
         $hashid = $user->hashed_user_id;
 
-        \Log::info($user_role);
         $itemsPerPage = $request->get('itemsPerPage', 10);
         $page = $request->get('page', 1);
 
