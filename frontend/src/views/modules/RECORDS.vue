@@ -9,8 +9,11 @@
                     Generate PDF</v-btn>
             </v-row>
             <v-row>
-                <v-data-table class="elevation-1" :headers="headers" :items-per-page="10">
-                </v-data-table>
+                <v-data-table-server class="elevation-1" :headers="headers" v-model:items-per-page="itemsPerPage"
+                    :items="GET_ATTLOGS.data || []" :items-length="GET_ATTLOGS.total || total" :loading="load"
+                    @update:options="fetchRecords">
+                </v-data-table-server>
+
             </v-row>
         </v-container>
     </v-app>
@@ -18,7 +21,6 @@
 
 
 <script>
-
 import { mapGetters } from "vuex";
 import moment from 'moment';
 
@@ -26,22 +28,39 @@ export default {
     data() {
         return {
             headers: [
-                { title: "Name", sortable: false },
-                { title: "Time In", sortable: false },
-            ]
+                { title: "Name", sortable: false, key: "name" },
+                { title: "Time In", sortable: false, key: "time_in" },
+            ],
+            total: 0,
+            itemsPerPage: 3,
+            load: false,
         };
     },
     computed: {
-        ...mapGetters(["", "", ""]),
+        ...mapGetters(["GET_ATTLOGS", "", ""]),
     },
     methods: {
-
-
-
-
+        fetchRecords(page) {
+            this.load = true;
+            const payload = {
+                itemsPerPage: page.itemsPerPage,
+                page: page.page,
+            };
+            this.$store.dispatch('getAttendance', payload).then((response) => {
+                this.load = false;
+            });
+        },
     },
-    created() {
 
+    watch: {
+        fetchRecords: {
+            handler(val) {
+                console.log(val)
+            }
+        }
+    },
+
+    created() {
     },
 };
 </script>
