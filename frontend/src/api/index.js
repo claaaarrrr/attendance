@@ -10,10 +10,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (request) {
-    // Ensure that request.headers exists and initialize it if it doesn't
     request.headers = request.headers || {};
 
-    // Set the headers
     request.headers["Content-Type"] = "application/json,text/html";
     request.headers["Accept"] = "Application/json";
     request.headers["Authorization"] =

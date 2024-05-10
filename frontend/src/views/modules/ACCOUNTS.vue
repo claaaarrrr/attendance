@@ -15,6 +15,11 @@
         </v-row>
         <v-row>
           <v-col>
+            <strong>Suffix:</strong> {{ USER_DETAILS.suffix }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <strong>Gender:</strong> {{ USER_DETAILS.gender }}
           </v-col>
         </v-row>
@@ -28,17 +33,15 @@
             <strong>Address:</strong> {{ USER_DETAILS.address }}
           </v-col>
         </v-row>
-        <!-- Edit Button -->
         <v-row>
           <v-col>
             <v-btn color="primary" @click="editMode = true; formData = { ...USER_DETAILS }">Edit</v-btn>
           </v-col>
         </v-row>
-        <!-- End of Edit Button -->
       </v-card-text>
     </v-card>
 
-    <!-- Edit Profile Dialog -->
+
     <v-dialog v-model="editMode" max-width="500px">
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
@@ -60,11 +63,13 @@
               <v-col>
                 <v-text-field v-model="formData.last_name" label="Last Name"></v-text-field>
               </v-col>
+              <v-col>
+                <v-text-field v-model="formData.suffix" label="Suffix"></v-text-field>
+              </v-col>
             </v-row>
             <v-text-field v-model="formData.gender" label="Gender"></v-text-field>
             <v-text-field v-model="formData.email" label="Email"></v-text-field>
             <v-text-field v-model="formData.address" label="Address"></v-text-field>
-
             <v-row>
               <v-btn type="submit" color="success">Update</v-btn>
               <v-spacer></v-spacer>
@@ -74,7 +79,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- End of Edit Profile Dialog -->
   </v-container>
 </template>
 
@@ -92,6 +96,7 @@ export default {
         first_name: '',
         middle_name: '',
         last_name: '',
+        suffix: '',
         gender: '',
         email: '',
         address: '',
@@ -105,15 +110,17 @@ export default {
         first_name: this.formData.first_name,
         middle_name: this.formData.middle_name,
         last_name: this.formData.last_name,
+        suffix: this.formData.suffix,
         gender: this.formData.gender,
         email: this.formData.email,
         address: this.formData.address,
+
       };
       console.log(forms);
       this.$store.dispatch('UpdateUserDetails', forms).then(() => {
         this.$swal.fire({
           title: "Update Success",
-          text: "Account changes has been made!",
+          text: "User details updated successfully",
           icon: "success",
         });
         this.editMode = false;

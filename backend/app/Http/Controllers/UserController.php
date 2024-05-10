@@ -142,6 +142,7 @@ class UserController extends Controller
                 'users.middle_name',
                 'users.last_name',
                 'users.user_role',
+                'users.suffix',
                 DB::raw("CONCAT(users.first_name, ' ', users.middle_name, ' ', users.last_name) as name"),
                 'users.profile_pic_path'
             )
@@ -175,6 +176,7 @@ class UserController extends Controller
                 'first_name' => 'nullable|string',
                 'middle_name' => 'nullable|string',
                 'last_name' => 'nullable|string',
+                'suffix' => 'nullable|string',
                 'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
@@ -186,7 +188,7 @@ class UserController extends Controller
 
             if ($request->hasFile('profile_pic')) {
                 $profilePic = $request->file('profile_pic');
-                $profilePicPath = $profilePic->store('profile_pics', 'public');
+                $profilePicPath = $profilePic->store('images', 'public');
                 $user->profile_pic_path = $profilePicPath;
             }
 
