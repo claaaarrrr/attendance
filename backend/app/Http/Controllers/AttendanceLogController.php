@@ -27,7 +27,8 @@ class AttendanceLogController extends Controller
             DB::raw("TIME(attendance_logs.created_at) as time_in"),
             DB::raw("DATE(attendance_logs.created_at) as date_in")
         )->leftJoin('attendance_logs', 'users.hashed_user_id', '=', 'attendance_logs.hashed_user_id')
-            ->whereNotNull('attendance_logs.created_at');
+            ->whereNotNull('attendance_logs.created_at')
+            ->orderBy('attendance_logs.created_at', 'desc');
 
         if ($user_role == 1) {
             $query->where('users.hashed_user_id', $hashid);

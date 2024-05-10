@@ -24,4 +24,5 @@ Route::middleware('auth:api')->group(function () {
 
     // Schedule
     Route::get('/getSchedule', [ScheduleController::class, 'getSchedule']);
+    Route::put('/updateSchedule', [ScheduleController::class, 'updateSchedule']);
 });
