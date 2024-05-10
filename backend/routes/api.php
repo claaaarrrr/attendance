@@ -1,6 +1,7 @@
-
 use Illuminate\Http\Request;
 <?php
+
+use App\Http\Controllers\AttendanceLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -17,4 +18,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/ReadUserQR', [UserController::class, 'ReadUserQR']);
     Route::post('/UpdateUserDetails', [UserController::class, 'UpdateUserDetails']);
 
+    // Attendance Logs
+    Route::get('/getAttendance', [AttendanceLogController::class, 'getAttendance']);
 });
