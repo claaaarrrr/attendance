@@ -37,7 +37,7 @@
           <v-col>
             <strong>Username:</strong> {{ USER_DETAILS.username }}
           </v-col>
-        </v-row>
+        </v-row> 
         <v-row class="d-flex justify-center">
           <v-col>
             <strong>Password:</strong> {{ maskedPassword }}
