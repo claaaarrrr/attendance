@@ -12,13 +12,13 @@
           <v-form ref="myForm" @submit.prevent="submit">
             <v-text-field v-model="form.first_name" :rules="rules.required" outlined dense
               label="First Name"></v-text-field>
-            <v-text-field v-model="form.middle_name" :rules="rules.required" outlined dense
-              label="Middle Name"></v-text-field>
-            <v-text-field v-model="form.last_name" :rules="rules.required" outlined dense
-              label="Last Name"></v-text-field>
+            <v-text-field v-model="form.middle_name" outlined dense label="Middle Name"></v-text-field>
+            <v-text-field v-model="form.last_name" :rules="rules.required" outlined dense label=" Last
+              Name"></v-text-field>
             <v-text-field v-model="form.username" :rules="rules.required" outlined dense
               label="Username"></v-text-field>
             <v-text-field v-model="form.email" :rules="rules.required" outlined dense label="Email"></v-text-field>
+            <v-text-field v-model="form.address" outlined dense label="Address"></v-text-field>
             <v-text-field v-model="form.password" type="password" :rules="rules.required" outlined dense
               label="Password"></v-text-field>
             <v-autocomplete filled dense :rules="rules.required" v-model="form.gender" label="Gender"
@@ -68,6 +68,7 @@ export default {
         last_name: null,
         email: null,
         gender: null,
+        address: null,
       },
       headers: [
         { title: "ID", sortable: false },
@@ -115,6 +116,7 @@ export default {
       this.form.username = null
       this.form.email = null
       this.form.gender = null
+      this.form.address = null
       this.$refs.myForm.reset();
     },
     submit() {

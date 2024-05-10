@@ -54,26 +54,35 @@
           </v-row>
           <v-form @submit.prevent="updateUser()">
             <v-row>
-              <v-col>
+              <v-col cols="12">
                 <v-text-field v-model="formData.first_name" label="First Name"></v-text-field>
               </v-col>
-              <v-col>
+              <v-col cols="12">
                 <v-text-field v-model="formData.middle_name" label="Middle Name"></v-text-field>
               </v-col>
-              <v-col>
+              <v-col cols="12">
                 <v-text-field v-model="formData.last_name" label="Last Name"></v-text-field>
               </v-col>
-              <v-col>
+              <v-col cols="12">
                 <v-text-field v-model="formData.suffix" label="Suffix"></v-text-field>
               </v-col>
-            </v-row>
-            <v-text-field v-model="formData.gender" label="Gender"></v-text-field>
-            <v-text-field v-model="formData.email" label="Email"></v-text-field>
-            <v-text-field v-model="formData.address" label="Address"></v-text-field>
-            <v-row>
-              <v-btn type="submit" color="success">Update</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn color="error" @click="editMode = false">Cancel</v-btn>
+              <v-col cols="12">
+                <v-text-field v-model="formData.gender" label="Gender"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="formData.email" label="Email"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="formData.address" label="Address"></v-text-field>
+              </v-col>
+              <v-card-actions>
+                <v-col cols="6">
+                  <v-btn type="submit" color="success">Update</v-btn>
+                </v-col>
+                <v-col cols="6">
+                  <v-btn color="error" @click="editMode = false">Cancel</v-btn>
+                </v-col>
+              </v-card-actions>
             </v-row>
           </v-form>
         </v-card-text>

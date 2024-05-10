@@ -2,16 +2,12 @@
   <v-app>
     <v-app-bar app dark>
       <v-tabs v-model="activeTab" color="primary" class="centered-tabs">
-        <v-tab
-          v-for="(item, index) in tabs[USER_DETAILS.user_role]"
-          :key="index"
-          :to="item.route"
-        >
+        <v-tab v-for="(item, index) in tabs[USER_DETAILS.user_role]" :key="index" :to="item.route">
           {{ item.label }}
         </v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-      <v-btn @click="submitLogout">Logout</v-btn>
+      <v-btn @click="submitLogout" color="error">Logout</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
