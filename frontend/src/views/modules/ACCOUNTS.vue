@@ -4,9 +4,12 @@
       <v-card-title class="d-flex justify-center"><strong>User Information</strong></v-card-title>
       <v-card-text class="d-flex flex-column justify-center align-center">
         <v-row>
-          <!-- <v-col class="d-flex justify-center">
-            <img :src="USER_DETAILS.base64img" alt="Profile Picture" width="150" class="mr-2 profile-picture" />
-          </v-col> -->
+          <v-col class="d-flex justify-center">
+            <v-avatar size="200" color="black" rounded="0">
+              <img :src="USER_DETAILS.profile_pic_path" alt="Profile Picture" width="190" height="190"
+                class="profile-picture" />
+            </v-avatar>
+          </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
           <v-col>
@@ -41,17 +44,18 @@
       </v-card-text>
     </v-card>
 
-    <v-dialog v-model="editMode" max-width="500px">
+    <v-dialog v-model="editMode" max-width="500px" persistent>
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col class="d-flex justify-center">
-              <!-- <img :src="USER_DETAILS.base64img" alt="Profile Picture" width="150" class="mr-2 profile-picture" /> -->
-              <!-- <v-file-input v-model="formData.profile_pic" label="Profile Picture"></v-file-input> -->
-            </v-col>
-          </v-row>
-          <v-form @submit.prevent="updateUser()">
+        <v-form @submit.prevent="updateUser()">
+          <v-card-text>
+            <v-row>
+              <v-col class="d-flex justify-center">
+                <!-- <img :src="USER_DETAILS.base64img" alt="Profile Picture" w idth="150" class="mr-2 profile-picture" /> -->
+                <v-file-input v-model="formData.profile_pic" label="Profile Picture" accept="image/jpeg, image/png"
+                  @change="handleFileChange"></v-file-input>
+              </v-col>
+            </v-row>
             <v-row>
               <v-col cols="12">
                 <v-text-field v-model="formData.first_name" label="First Name"></v-text-field>
@@ -63,7 +67,8 @@
                 <v-text-field v-model="formData.last_name" label="Last Name"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="formData.suffix" label="Suffix"></v-text-field>
+                <v-text-field v-model="formData.suffix" label="Suffix" append-inner-icon="mdi-close"
+                  @click:append-inner="clearSuffix"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-select v-model="formData.gender" label="Gender" :items="['Female', 'Male', 'Others']"></v-select>
@@ -89,8 +94,8 @@
                 </v-col>
               </v-card-actions>
             </v-row>
-          </v-form>
-        </v-card-text>
+          </v-card-text>
+        </v-form>
       </v-card>
     </v-dialog>
   </v-container>
@@ -124,20 +129,50 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['UpdateUserDetails']),
+    clearSuffix() {
+      this.editMode = false;
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "This will clear the suffix. Are you sure you want to proceed?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, clear it!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: true
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.$store.dispatch('clearSuffix').then((response) => {
+              if (response.status == 200) {
+                this.$swal.fire({
+                  text: "Suffix is now set to null.",
+                  title: "Removed",
+                  icon: "success"
+                });
+              }
+            });
+          } else {
+            this.editMode = true;
+          }
+        });
+    },
     updateUser() {
-      const forms = {
-        first_name: this.formData.first_name,
-        middle_name: this.formData.middle_name,
-        last_name: this.formData.last_name,
-        suffix: this.formData.suffix,
-        gender: this.formData.gender,
-        email: this.formData.email,
-        address: this.formData.address,
-        username: this.formData.username,
-        password: this.formData.password,
-      };
-      this.$store.dispatch('UpdateUserDetails', forms).then(() => {
+      const toPass = new FormData();
+
+      toPass.append('first_name', this.formData.first_name);
+      toPass.append('middle_name', this.formData.middle_name);
+      toPass.append('last_name', this.formData.last_name);
+      toPass.append('suffix', this.formData.suffix);
+      toPass.append('gender', this.formData.gender);
+      toPass.append('email', this.formData.email);
+      if (this.formData.profile_pic) {
+        toPass.append('profile_pic', this.formData.profile_pic);
+      }
+      toPass.append('address', this.formData.address);
+      toPass.append('username', this.formData.username);
+
+      this.$store.dispatch('UpdateUserDetails', toPass).then(() => {
         this.$swal.fire({
           title: "Update Success",
           text: "User details updated successfully",
@@ -146,6 +181,10 @@ export default {
         this.editMode = false;
       });
     },
+
+    handleFileChange(event) {
+      this.formData.profile_pic = event.target.files[0];
+    }
   },
 };
 </script>

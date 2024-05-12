@@ -12,7 +12,15 @@ instance.interceptors.request.use(
   function (request) {
     request.headers = request.headers || {};
 
-    request.headers["Content-Type"] = "application/json,text/html";
+    // Check if the request is sending form data (e.g., uploading a file)
+    if (request.data instanceof FormData) {
+      // Set Content-Type to "multipart/form-data" for form data requests
+      request.headers["Content-Type"] = "multipart/form-data";
+    } else {
+      // Set Content-Type to "application/json" for other requests
+      request.headers["Content-Type"] = "application/json";
+    }
+
     request.headers["Accept"] = "Application/json";
     request.headers["Authorization"] =
       "Bearer " + localStorage.getItem("attendance-token");
