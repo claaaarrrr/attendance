@@ -149,15 +149,11 @@ class UserController extends Controller
                 'users.profile_pic_path'
             )
             ->first();
-        if ($userDetail->profile_pic_path != null) {
-            $image_type = substr($userDetail->profile_pic_path, -3);
-            $image_format = '';
-            if ($image_type == 'png' || $image_type == 'jpg') {
-                $image_format = $image_type;
-            }
-            $base64str = '';
-            $base64str = base64_encode(file_get_contents(public_path($userDetail->profile_pic_path)));
-            $userDetail->base64img = 'data:image/' . $image_format . ';base64,' . $base64str;
+        if ($userDetail && $userDetail->profile_pic_path) {
+            $fullPath = public_path('storage/' . $userDetail->profile_pic_path);
+            $relativePath = str_replace(public_path('storage/'), '', $fullPath);
+            $userDetail->profile_pic_path = env('APP_URL') . '/storage/' . $relativePath;
+            $check = env('APP_URL');
         }
         return $userDetail;
     }
@@ -179,7 +175,7 @@ class UserController extends Controller
                 'middle_name' => 'nullable|string',
                 'last_name' => 'nullable|string',
                 'suffix' => 'nullable|string',
-                'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                // 'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 // 'username' => 'nullable|string',
                 // 'password' => 'string',
             ]);
@@ -242,6 +238,21 @@ class UserController extends Controller
         $newVoter->save();
         // return $newVoter;
         return response()->json(['message' => 'Successfully Registered'], 200);
+    }
+
+    public function clearSuffix()
+    {
+        $id = Auth::user()->id;
+
+        $user = User::findOrFail($id);
+
+        $user->suffix = null;
+
+        $user->save();
+
+        $updatedUserDetails = $this->GetUserDetails();
+
+        return $updatedUserDetails;
     }
 
 

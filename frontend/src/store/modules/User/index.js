@@ -139,5 +139,20 @@ export default {
           });
       });
     },
+
+    clearSuffix({ commit }) {
+      return new Promise((resolve, reject) => {
+        api
+          .delete("api/clearSuffix")
+          .then((response) => {
+            console.log(response.data);
+            commit("USER_DETAILS", response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
   },
 };

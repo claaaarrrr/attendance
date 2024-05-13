@@ -18,6 +18,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/Logout', [UserController::class, 'Logout']);
     Route::post('/ReadUserQR', [UserController::class, 'ReadUserQR']);
     Route::post('/UpdateUserDetails', [UserController::class, 'UpdateUserDetails']);
+    Route::delete('clearSuffix', [UserController::class, 'clearSuffix']);
 
     // Attendance Logs
     Route::get('/getAttendance', [AttendanceLogController::class, 'getAttendance']);
