@@ -31,10 +31,14 @@ export default {
           { label: "SCANNER", route: "/TABSPAGE/SCANNER" },
         ],
         [
-          // Define tabs for role2 here
           { label: "ACCOUNT", route: "/TABSPAGE/ACCOUNTS" },
           { label: "RECORDS", route: "/TABSPAGE/RECORDS" },
           { label: "QR CODE", route: "/TABSPAGE/QRCODE" },
+        ],
+        [
+          { label: "RECORDS", route: "/TABSPAGE/RECORDS" },
+          { label: "SCHEDULE", route: "/TABSPAGE/SCHEDULE" },
+          { label: "SCANNER", route: "/TABSPAGE/SCANNER" },
         ],
       ],
     };
@@ -54,7 +58,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("GetUserDetails").then(() => {
-      console.log(this.USER_DETAILS);
     });
   },
 };

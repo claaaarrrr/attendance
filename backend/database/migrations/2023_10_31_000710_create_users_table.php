@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('suffix')->nullable();
             $table->tinyInteger('user_role')->default(1); //admin -> 0 , end_user -> 1
+            $table->string('user_role_desc')->default('student');
             $table->string('email');
             $table->string('gender');
             $table->string('profile_pic_path')->nullable();

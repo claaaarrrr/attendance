@@ -15,10 +15,12 @@ class UserController extends Controller
     public function ReadUserQR(Request $request)
     {
         // Set the timezone to Asia/Manila
+        $role = Auth::user()->user_role;
         date_default_timezone_set('Asia/Manila');
         $AttendanceLog = new AttendanceLog();
         $AttendanceLog->hashed_user_id = $request->input('hashed_user_id');
         $AttendanceLog->save();
+        \Log::info($role);
         return response()->json(['message' => 'success'], 201);
     }
 
@@ -143,6 +145,7 @@ class UserController extends Controller
                 'users.middle_name',
                 'users.last_name',
                 'users.user_role',
+                'users.user_role_desc',
                 'users.suffix',
                 'users.username',
                 DB::raw("CONCAT_WS(' ', users.first_name, users.middle_name, users.last_name, users.suffix) AS name"),
@@ -216,28 +219,6 @@ class UserController extends Controller
         $user = $request->user();
         $user->token()->revoke();
         return ['message' => 'success'];
-    }
-
-    public function Register(Request $request)
-    {
-        $pass = Hash::make($request->password);
-        // Create a new user
-        $newVoter = new User();
-        $newVoter->first_name = $request->firstname;
-        $newVoter->middle_name = $request->midname;
-        $newVoter->last_name = $request->lastname;
-        $newVoter->user_role = 2;
-        $newVoter->suffix = $request->suffix;
-        $newVoter->email = $request->email;
-        $newVoter->age = $request->age;
-        $newVoter->address = $request->address;
-        $newVoter->gender = $request->gender;
-        $newVoter->username = $request->username;
-        $newVoter->password = $pass;
-        // Save the user to the database
-        $newVoter->save();
-        // return $newVoter;
-        return response()->json(['message' => 'Successfully Registered'], 200);
     }
 
     public function clearSuffix()
