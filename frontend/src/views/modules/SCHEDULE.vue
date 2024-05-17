@@ -97,7 +97,6 @@ export default {
         time_in: this.timeIn,
         time_out: this.timeOut
       }
-      console.log(this.timeIn);
       this.$store.dispatch('updateSchedule', payload).then((response) => {
         this.$swal.fire({
           text: response.data.message,

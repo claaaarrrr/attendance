@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('attendance_logs', function (Blueprint $table) {
             $table->id();
             $table->string('hashed_user_id');
+            $table->string('scanned_by');
             $table->timestamps();
         });
     }

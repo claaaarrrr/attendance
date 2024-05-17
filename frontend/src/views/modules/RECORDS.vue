@@ -12,6 +12,9 @@
                 <v-data-table-server class="elevation-1" :headers="headers" v-model:items-per-page="itemsPerPage"
                     :items="GET_ATTLOGS.data || []" :items-length="GET_ATTLOGS.total || total" :loading="load"
                     @update:options="fetchRecords">
+                    <template v-slot:[`item.scanned_by`]="{ item }">
+                        {{ item.scanned_by.charAt(0).toUpperCase() + item.scanned_by.slice(1).toLowerCase() }}
+                    </template>
                     <template v-slot:[`item.status`]="{ item }">
                         <v-chip :color="item.time_in > GET_IN ? 'red' : 'green'">
                             {{ item.time_in > GET_IN ? 'Late' : 'On-Time' }}
@@ -37,6 +40,7 @@ export default {
                 { title: "Name", sortable: false, key: "name" },
                 { title: "Date", sortable: false, key: "date_in" },
                 { title: "Time In", sortable: false, key: "time_in" },
+                { title: "Scanned At", sortable: false, key: "scanned_by" },
                 { title: "Status", sortable: false, value: 'status' },
             ],
             total: 0,
@@ -73,7 +77,7 @@ export default {
 
             let y = 25;
 
-            const headers = ["No.", "Name", "Date", "Time In", "Status"];
+            const headers = ["No.", "Name", "Date", "Scanned At", "Time In", "Status"];
 
             const tableData = this.GET_ATTLOGS.data.map((item, index) => {
                 const formattedDate = new Date(item.date_in).toLocaleDateString('en-US', {
@@ -86,6 +90,7 @@ export default {
                     (index + 1).toString(), // No. column
                     item.name,              // Name column
                     formattedDate,          // Date column
+                    item.scanned_by,
                     item.time_in.toString(),// Time In column
                     item.time_in > this.GET_IN ? 'Late' : 'On-Time' // Status column
                 ];

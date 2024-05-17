@@ -14,7 +14,7 @@ class AttendanceLogController extends Controller
     public function getAttendance(Request $request)
     {
         $user = Auth::user();
-        $user_role = $user->user_role;
+        $user_role = $user->user_role_desc;
         $hashid = $user->hashed_user_id;
 
         $itemsPerPage = $request->get('itemsPerPage', 10);
@@ -24,13 +24,16 @@ class AttendanceLogController extends Controller
             DB::raw("CONCAT_WS(' ', users.first_name, users.middle_name, users.last_name, users.suffix) AS name"),
             'users.gender',
             'users.email',
+            'attendance_logs.scanned_by',
             DB::raw("TIME(attendance_logs.created_at) as time_in"),
             DB::raw("DATE(attendance_logs.created_at) as date_in")
         )->leftJoin('attendance_logs', 'users.hashed_user_id', '=', 'attendance_logs.hashed_user_id')
             ->whereNotNull('attendance_logs.created_at')
             ->orderBy('attendance_logs.created_at', 'desc');
 
-        if ($user_role == 1) {
+        if ($user_role !== 'admin' && $user_role !== 'student') {
+            $query->where('attendance_logs.scanned_by', $user_role);
+        } else if ($user_role === 'student') {
             $query->where('users.hashed_user_id', $hashid);
         }
 

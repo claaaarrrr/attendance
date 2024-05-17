@@ -15,12 +15,12 @@ class UserController extends Controller
     public function ReadUserQR(Request $request)
     {
         // Set the timezone to Asia/Manila
-        $role = Auth::user()->user_role;
+        $role = Auth::user()->user_role_desc;
         date_default_timezone_set('Asia/Manila');
         $AttendanceLog = new AttendanceLog();
         $AttendanceLog->hashed_user_id = $request->input('hashed_user_id');
+        $AttendanceLog->scanned_by = $role;
         $AttendanceLog->save();
-        \Log::info($role);
         return response()->json(['message' => 'success'], 201);
     }
 

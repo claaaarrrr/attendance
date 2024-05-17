@@ -38,9 +38,7 @@ import Swal from 'sweetalert2';
 const store = useStore();
 
 function onDetect(detectedCodes) {
-  console.log(detectedCodes)
   const payload = { hashed_user_id: detectedCodes[0].rawValue };
-  console.log(payload)
   store.dispatch("ReadUserQR", payload).then((response) => {
     if (response.message === "success") {
       Swal.fire({

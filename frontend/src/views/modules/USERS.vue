@@ -140,13 +140,11 @@ export default {
       this.isDialogOpen = state;
     },
     deleteItem(item) {
-      console.log(item);
       const payload = {
         params: {
           id: item.id,
         },
       };
-      console.log(payload);
       this.$store.dispatch("DeleteUser", payload).then(() => {
         this.$store.dispatch("GetUsers");
       });
@@ -154,7 +152,6 @@ export default {
   },
   created() {
     this.$store.dispatch("GetUsers").then((response) => {
-      //   console.log(this.USERS);
     });
   },
 };
