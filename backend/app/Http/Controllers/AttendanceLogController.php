@@ -31,6 +31,10 @@ class AttendanceLogController extends Controller
             ->whereNotNull('attendance_logs.created_at')
             ->orderBy('attendance_logs.created_at', 'desc');
 
+        if ($request->search) {
+            $query->where('attendance_logs.scanned_by', $request->search);
+        }
+
         if ($user_role !== 'admin' && $user_role !== 'student') {
             $query->where('attendance_logs.scanned_by', $user_role);
         } else if ($user_role === 'student') {

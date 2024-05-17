@@ -11,7 +11,7 @@
             <v-row>
                 <v-data-table-server class="elevation-1" :headers="headers" v-model:items-per-page="itemsPerPage"
                     :items="GET_ATTLOGS.data || []" :items-length="GET_ATTLOGS.total || total" :loading="load"
-                    @update:options="fetchRecords">
+                    @update:options="fetchRecords" item-value="scanned">
                     <template v-slot:[`item.scanned_by`]="{ item }">
                         {{ item.scanned_by.charAt(0).toUpperCase() + item.scanned_by.slice(1).toLowerCase() }}
                     </template>
@@ -19,6 +19,13 @@
                         <v-chip :color="item.time_in > GET_IN ? 'red' : 'green'">
                             {{ item.time_in > GET_IN ? 'Late' : 'On-Time' }}
                         </v-chip>
+                    </template>
+
+                    <template v-slot:thead
+                        v-if="USER_DETAILS.user_role_desc == 'admin' || USER_DETAILS.user_role_desc == 'student'">
+                        <v-text-field v-model="scanned" variant="underlined" prepend-icon="mdi-magnify" class="ma-2"
+                            density="compact" @change="fetchRecords" placeholder="Filter by Office..."
+                            hide-details></v-text-field>
                     </template>
                 </v-data-table-server>
             </v-row>
@@ -46,10 +53,11 @@ export default {
             total: 0,
             itemsPerPage: 5,
             load: false,
+            scanned: '',
         };
     },
     computed: {
-        ...mapGetters(["GET_ATTLOGS", "GET_IN", "GET_OUT"]),
+        ...mapGetters(["GET_ATTLOGS", "GET_IN", "GET_OUT", "USER_DETAILS"]),
     },
     methods: {
         fetchRecords(page) {
@@ -57,6 +65,7 @@ export default {
             const payload = {
                 itemsPerPage: page.itemsPerPage,
                 page: page.page,
+                search: this.scanned,
             };
             this.$store.dispatch('getAttendance', payload).then((response) => {
                 this.load = false;
