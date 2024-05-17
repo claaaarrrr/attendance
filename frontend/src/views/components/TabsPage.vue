@@ -37,7 +37,6 @@ export default {
         ],
         [
           { label: "RECORDS", route: "/TABSPAGE/RECORDS" },
-          { label: "SCHEDULE", route: "/TABSPAGE/SCHEDULE" },
           { label: "SCANNER", route: "/TABSPAGE/SCANNER" },
         ],
       ],
