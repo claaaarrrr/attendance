@@ -3,6 +3,10 @@
         <v-container>
             <v-row>
                 <h1>Records</h1>
+                <v-spacer></v-spacer v-if="USER_DETAILS.user_role_desc == 'admin'">
+                <v-btn color="success" elevation="1" v-if="USER_DETAILS.user_role_desc == 'admin'">
+                    <v-icon icon="mdi-microsoft-excel"></v-icon>
+                    Generate EXCEL</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="red" elevation="1" @click="generatePDF">
                     <v-icon icon="mdi-file-pdf-box"></v-icon>

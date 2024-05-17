@@ -4,25 +4,13 @@
       <v-row>
         <v-col cols="12" lg="10">
           <v-form ref="myForm" @submit.prevent="login">
-            <v-text-field
-              v-model="username"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Username"
-            ></v-text-field>
-            <v-text-field
-              v-model="password"
-              type="password"
-              :rules="rules.required"
-              outlined
-              dense
-              label="Password"
-            ></v-text-field>
+            <v-text-field v-model="username" :rules="rules.required" outlined dense label="Username"></v-text-field>
+            <v-text-field v-model="password" type="password" :rules="rules.required" outlined dense
+              label="Password"></v-text-field>
             <v-row>
               <v-col cols="12">
                 <center>
-                  <v-btn type="submit" dark>Sign in</v-btn>
+                  <v-btn type="submit" dark>Log In</v-btn>
                 </center>
               </v-col>
             </v-row>
@@ -33,7 +21,7 @@
   </v-app>
 </template>
 
-  
+
 <script>
 export default {
   data() {
@@ -96,7 +84,7 @@ export default {
   },
 };
 </script>
-  
+
 <style scoped>
 * {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -119,4 +107,3 @@ export default {
   font-size: 1rem;
 }
 </style>
-  
