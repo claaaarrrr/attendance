@@ -13,7 +13,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/authenticate', [UserController::class, 'authenticate']);
     Route::get('/GetUserDetails', [UserController::class, 'GetUserDetails']);
     Route::get('/GetUsers', [UserController::class, 'GetUsers']);
-    Route::delete('/DeleteUser', [UserController::class, 'DeleteUser']);
+    Route::delete('/DeleteUser', [UserController::class, 'deleteUser']);
     Route::post('/InsertUser', [UserController::class, 'InsertUser']);
     Route::post('/Logout', [UserController::class, 'Logout']);
     Route::post('/ReadUserQR', [UserController::class, 'ReadUserQR']);

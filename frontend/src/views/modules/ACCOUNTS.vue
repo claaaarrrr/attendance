@@ -13,12 +13,12 @@
         </v-row>
         <v-row class="d-flex justify-center">
           <v-col>
-            <strong>Name:</strong> {{ USER_DETAILS.name }}
+            <strong>LRN:</strong> {{ USER_DETAILS.lrn }}
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
           <v-col>
-            <strong>Suffix:</strong> {{ USER_DETAILS.suffix }}
+            <strong>Name:</strong> {{ USER_DETAILS.name }}
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
@@ -58,10 +58,14 @@
             </v-row>
             <v-row>
               <v-col cols="12">
+                <v-text-field v-model="formData.lrn" label="Learner's Reference No."></v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-text-field v-model="formData.first_name" label="First Name"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="formData.middle_name" label="Middle Name"></v-text-field>
+                <v-text-field v-model="formData.middle_name" label="Middle Name" append-inner-icon="mdi-close"
+                  @click:append-inner="clearMiddleName"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field v-model="formData.last_name" label="Last Name"></v-text-field>
@@ -115,6 +119,7 @@ export default {
     return {
       editMode: false,
       formData: {
+        lrn: '',
         first_name: '',
         middle_name: '',
         last_name: '',
@@ -129,6 +134,9 @@ export default {
     }
   },
   methods: {
+    clearMiddleName() {
+      this.formData.middle_name = '';
+    },
     clearSuffix() {
       this.editMode = false;
       this.$swal
@@ -160,10 +168,11 @@ export default {
     updateUser() {
       const toPass = new FormData();
 
+      toPass.append('lrn', this.formData.lrn);
       toPass.append('first_name', this.formData.first_name);
-      toPass.append('middle_name', this.formData.middle_name);
+      toPass.append('middle_name', this.formData.middle_name || '');
       toPass.append('last_name', this.formData.last_name);
-      toPass.append('suffix', this.formData.suffix);
+      toPass.append('suffix', this.formData.suffix || '');
       toPass.append('gender', this.formData.gender);
       toPass.append('email', this.formData.email);
       if (this.formData.profile_pic) {

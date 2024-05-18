@@ -27,6 +27,7 @@ class UserController extends Controller
     public function insertUser(Request $request)
     {
         $user = new User();
+        $user->lrn = $request->input('lrn');
         $user->first_name = $request->input('first_name');
         $user->middle_name = $request->input('middle_name');
         $user->last_name = $request->input('last_name');
@@ -145,6 +146,7 @@ class UserController extends Controller
                 'users.middle_name',
                 'users.last_name',
                 'users.user_role',
+                'users.lrn',
                 'users.user_role_desc',
                 'users.suffix',
                 'users.username',
@@ -171,6 +173,7 @@ class UserController extends Controller
             $currentUserDetails = $this->GetUserDetails();
 
             $validatedData = $request->validate([
+                'lrn' => 'nullable|string',
                 'gender' => 'nullable|string',
                 'email' => 'nullable|email',
                 'address' => 'nullable|string',
@@ -184,13 +187,17 @@ class UserController extends Controller
             ]);
 
             foreach ($validatedData as $key => $value) {
-                if ($value !== null && $currentUserDetails->{$key} !== $value) {
+                // Check if the value is NULL or different from the current value
+                if (!is_null($value) && $currentUserDetails->{$key} !== $value) {
                     if ($key === 'password') {
                         // Hash the password before saving it
                         $user->{$key} = Hash::make($value);
                     } else {
                         $user->{$key} = $value;
                     }
+                } elseif (is_null($value)) {
+                    // Explicitly set the database field to NULL if the value is NULL
+                    $user->{$key} = null;
                 }
             }
 

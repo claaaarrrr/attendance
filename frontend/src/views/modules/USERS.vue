@@ -10,6 +10,8 @@
       <v-card>
         <v-card-text class="pt-6">
           <v-form ref="myForm" @submit.prevent="submit">
+            <v-text-field v-model="form.lrn" :rules="rules.required" outlined dense
+              label="Learner's Reference No."></v-text-field>
             <v-text-field v-model="form.first_name" :rules="rules.required" outlined dense
               label="First Name"></v-text-field>
             <v-text-field v-model="form.middle_name" outlined dense label="Middle Name"></v-text-field>
@@ -46,7 +48,7 @@
           <td>
             <!-- <v-icon @click="viewItem(item)" class="mr-2">mdi-eye</v-icon> -->
             <!-- <v-icon @click="editItem(item)" color="orange">mdi-pencil</v-icon> -->
-            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon @click="deleteItem(item)" v-if="item.user_role_desc === 'student'">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -63,6 +65,7 @@ export default {
     return {
       isDialogOpen: false,
       form: {
+        lrn: null,
         first_name: null,
         middle_name: null,
         last_name: null,
@@ -110,6 +113,7 @@ export default {
   },
   methods: {
     resetForm() {
+      this.form.lrn = null
       this.form.first_name = null
       this.form.middle_name = null
       this.form.last_name = null
@@ -145,9 +149,31 @@ export default {
           id: item.id,
         },
       };
-      this.$store.dispatch("DeleteUser", payload).then(() => {
-        this.$store.dispatch("GetUsers");
-      });
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "This will remove the student. Are you sure you want to proceed?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, remove it!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: true
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.$store.dispatch('DeleteUser', payload).then((response) => {
+              if (response.message == 'User deleted successfully') {
+                this.$swal.fire({
+                  text: "Student is removed.",
+                  title: "Removed",
+                  icon: "success"
+                });
+              }
+              this.$store.dispatch("GetUsers").then((response) => {
+              });
+            });
+          }
+        });
     },
   },
   created() {

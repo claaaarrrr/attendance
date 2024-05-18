@@ -46,6 +46,7 @@ export default {
     submitLogout() {
       this.$store.dispatch("Logout").then((response) => {
         if (response["message"] === "success") {
+          this.$store.commit('SET_ATTLOGS', []);
           sessionStorage.removeItem("attendance-token");
           this.$router.push("/");
         }

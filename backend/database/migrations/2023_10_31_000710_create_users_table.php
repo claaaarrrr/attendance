@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('hashed_user_id')->nullable();
+            $table->string('lrn')->nullable();
             $table->string('username');
             $table->string('password');
             $table->string('first_name');
