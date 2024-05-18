@@ -4,7 +4,8 @@
             <v-row>
                 <h1>Records</h1>
                 <v-spacer></v-spacer v-if="USER_DETAILS.user_role_desc == 'admin'">
-                <v-btn color="success" elevation="1" v-if="USER_DETAILS.user_role_desc == 'admin'">
+                <v-btn color="success" elevation="1" v-if="USER_DETAILS.user_role_desc == 'admin'"
+                    @click="generateExcel">
                     <v-icon icon="mdi-microsoft-excel"></v-icon>
                     Generate EXCEL</v-btn>
                 <v-spacer></v-spacer>
@@ -43,6 +44,7 @@ import { mapGetters } from "vuex";
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 
 export default {
     data() {
@@ -126,6 +128,22 @@ export default {
             });
 
             doc.save("attendance_records.pdf");
+        },
+
+        generateExcel() {
+            const processedData = this.GET_ATTLOGS.data.map(item => {
+                const status = item.time_in > this.GET_IN ? 'Late' : 'On-Time';
+                return {
+                    ...item,
+                    status: status
+                };
+            });
+
+            const ws = XLSX.utils.json_to_sheet(processedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Attendance Logs');
+
+            XLSX.writeFile(wb, 'AttendanceLogs.xlsx');
         }
 
     },

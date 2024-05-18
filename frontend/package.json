@@ -27,7 +27,8 @@
     "vue3-icon-picker": "^0.1.1",
     "vue3-leaflet": "^1.0.48",
     "vuetify": "^3.0.0",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/types": "^7.23.0",
